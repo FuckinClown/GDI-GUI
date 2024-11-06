@@ -1,12 +1,50 @@
 using GDI_GUI.Properties;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace GDI_GUI
 {
     public partial class frm_Main : Form
     {
+        #region Custom Title Bar
+
+        // This is the only way I could figure out how to do it
+        // ik importing dlls is weird but it works
+        [DllImportAttribute("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
+        [DllImportAttribute("user32.dll")]
+        public static extern bool ReleaseCapture();
+
+        private void btn_close_Click(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
+        }
+
+        private void btn_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void titleBar_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, 0xA1, 0x2, 0);
+            }
+        }
+        
+        private void btn_options_Click(object sender, EventArgs e)
+        {
+            Form options = new Frm_Options();
+            options.ShowDialog();
+        }
+        #endregion
+
         string allPayloads = "";
+        static AppDataHandler ADH = new AppDataHandler();
         public frm_Main()
         {
             InitializeComponent();
@@ -85,6 +123,10 @@ namespace GDI_GUI
         CloseHandle(thrd_rainbow);
     """;
             }
+            if (chk_smear.Checked == true)
+            {
+                allPayloads += $"\n    ScreenSmear(timePerEffect);\n    Sleep(timeInBetween);";
+            }
             if (chk_shake.Checked == true)
             {
                 allPayloads += $"\n    ScreenShake(timePerEffect);\n    Sleep(timeInBetween);";
@@ -107,24 +149,31 @@ namespace GDI_GUI
 
             try
             {
-                CompileCppCode($"{Path.GetTempPath()}\\GDI-GUI-CustomStub.cpp", extraArgs);
+                CompileCppCode($@"{Path.GetTempPath()}\GDI-GUI-CustomStub.cpp", extraArgs);
             }
-            catch (System.ComponentModel.Win32Exception) 
+            catch (System.ComponentModel.Win32Exception)
             {
-                MessageBox.Show("ERROR! A g++ compiler does not apear to be installed, please install minGW or Msys64 so I can compile.\n\nIf a compiler is installed, make sure it is in your environment variables so that I can acess it.\nThank you", "Compiler error!");
+                MessageBox.Show("ERROR! A g++ compiler does not apear to be installed, please install minGW or Msys64 so I can compile.\n\nIf a compiler is installed, head to the options page to specify the location.\nThank you", "Compiler error!");
             }
         }
 
         public static void CompileCppCode(string CodePath, string extraArguments)
         {
-            Process compiler = new Process();
-            compiler.StartInfo.FileName = "g++";
-            compiler.StartInfo.Arguments = $"{CodePath} -o GDI-GUI-output.exe -lgdi32 {extraArguments}";
+            string outputFileName = "GDI-GUI-output.exe";
+            string outputFilePath = Path.Combine(Directory.GetCurrentDirectory(), outputFileName);
 
-            compiler.StartInfo.RedirectStandardOutput = true;
-            compiler.StartInfo.RedirectStandardError = true;
-            compiler.StartInfo.UseShellExecute = false;
-            compiler.StartInfo.CreateNoWindow = true;
+            Process compiler = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = ADH.ReadCompilerLocation(),
+                    Arguments = $"\"{CodePath}\" -o \"{outputFilePath}\" -lgdi32 {extraArguments}",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                }
+            };
 
             compiler.Start();
 
@@ -140,7 +189,7 @@ namespace GDI_GUI
             }
             else
             {
-                MessageBox.Show("Compilation Suceeded!");
+                MessageBox.Show($"Compilation Suceeded! File Location:\n{outputFilePath}", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }

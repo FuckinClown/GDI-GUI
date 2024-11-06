@@ -113,7 +113,7 @@ void IconSpam(int totalTime) {
     }
 }
 
-void ScreenShake(int totalTime) {
+void ScreenSmear(int totalTime) {
     auto startTime = GetTickCount64();
     while (true) {
         auto currentTime = GetTickCount64();
@@ -123,12 +123,32 @@ void ScreenShake(int totalTime) {
         }
         auto hdc = GetDC(nullptr);
         int mult = 25;
-        srand(time(0));
+        srand(time(0)); // updating randomness every 1 sec smears screen and not shakes it
         int x = -((rand() % mult + 1) - (mult / 2));
         int y = -((rand() % mult + 1) - (mult / 2));
         auto brush = CreateSolidBrush(GetRainbow());
         SelectObject(hdc, brush);
         StretchBlt(hdc, 0, 0, screenWidth, screenHeight, hdc, x / 2, y / 2, screenWidth - x, screenHeight - y, 0x00CC0020);
+        ReleaseDC(nullptr, hdc);
+    }
+}
+
+void ScreenShake(int totalTime) {
+    auto startTime = GetTickCount64();
+    srand(time(0));
+    while (true) {
+        auto currentTime = GetTickCount64();
+        auto elapsedTime = (currentTime - startTime) / 1000;
+        if (elapsedTime >= totalTime) {
+            break;
+        }
+        auto hdc = GetDC(nullptr);
+        int mult = 25;
+        int x = -((rand() % mult + 1) - (mult / 2));
+        int y = -((rand() % mult + 1) - (mult / 2));
+        auto brush = CreateSolidBrush(GetRainbow());
+        SelectObject(hdc, brush);
+        StretchBlt(hdc, 0, 0, screenWidth, screenHeight, hdc, x/2, y/2, screenWidth - x, screenHeight - y, 0x00CC0020);
         ReleaseDC(nullptr, hdc);
     }
 }
