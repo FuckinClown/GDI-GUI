@@ -45,8 +45,8 @@ If you are still stuck, please refer to a youtube video or friend's help. Sorry 
 - Icon Spam
 - Shake
 ### Other Options
-- Effect Duration
-- Run all at once | WIP
+- Effect Duration | How long each effect lasts
+- Run Synchronously | Runs everything at once
 - Clear Screen | Closes all windows to maxamize effect
 - Kill wallpaper | Live wallpapers mess with the effects
 - Block Input | **Requires admin**
@@ -54,7 +54,7 @@ If you are still stuck, please refer to a youtube video or friend's help. Sorry 
 
 ## Compiler Errors
 
-Randomly you will get a compiler error, here are known fixes
+"Randomly" you will get a compiler error, here are known fixes
 
 if you get an error that is not on this list, please make a report and I will find a fix
 
