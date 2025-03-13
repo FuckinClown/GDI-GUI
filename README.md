@@ -3,7 +3,7 @@
 
 A visuals creator for fun. No payload is harmful, its all for show
 
-I might add a few features or abandon this after its done, if you like this project please star the repo so I know what you think
+If you like this project please star the repo so I know what you think
 
 
 
