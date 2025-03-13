@@ -1,4 +1,5 @@
 using GDI_GUI.Properties;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -35,117 +36,62 @@ namespace GDI_GUI
                 SendMessage(Handle, 0xA1, 0x2, 0);
             }
         }
-        
-        private void btn_options_Click(object sender, EventArgs e)
-        {
-            Form options = new Frm_Options();
-            options.ShowDialog();
-        }
         #endregion
 
-        string allPayloads = "";
         static AppDataHandler ADH = new AppDataHandler();
         public frm_Main()
         {
             InitializeComponent();
         }
 
+        private void frm_Main_bak_Load(object sender, EventArgs e)
+        {
+            if (ADH.ReadCompilerLocation() == "g++")
+                lbl_compiler_location.Text = "Default";
+            else
+                lbl_compiler_location.Text = ADH.ReadCompilerLocation();
+        }
+
         private void chk_threadEverything_CheckedChanged(object sender, EventArgs e)
         {
-            if (chk_threadEverything.Checked)
+            if (chk_synchronis.Checked)
                 lbl_time.Text = "Total Seconds";
             else
                 lbl_time.Text = "Seconds Per Effect";
         }
 
-        private void chk_dvdText_CheckedChanged(object sender, EventArgs e)
-        {
-            txt_dvdText.Visible = chk_dvdText.Checked;
-        }
+
 
         private void btn_build_Click(object sender, EventArgs e)
         {
-            allPayloads = $"int timePerEffect = {num_time.Value};";
+            // Hey would you look at that I found a better way to do it
+            var payloadBuilder = new PayloadBuilder((int)num_time.Value, chk_synchronis.Checked);
 
-            // whole lotta if statements coming up
-            // Unless you have a better idea, just be happy that it works
-
-            // the "Sleep(timeInBetween);" function is needed for it to work
-            // I do not know why, it just needs to catch its breath ig?
-            /// TODO: Experiment on how much time is needed
-
-            if (chk_tunnel.Checked == true)
+            // Regular Effects
+            foreach (string payloadName in lst_timesheet.Items)
             {
-                allPayloads += $"\n    Tunnel(timePerEffect);\n    Sleep(timeInBetween);";
-            }
-            if (chk_dvdball.Checked == true)
-            {
-                allPayloads += "\n    DvDBall(timePerEffect);\n    Sleep(timeInBetween);";
-            }
-            if (chk_dvdText.Checked == true)
-            {
-                allPayloads += $"\n    DvDText(\"{txt_dvdText.Text.Trim('"').Trim()}\", timePerEffect);\n    Sleep(timeInBetween);";
-            }
-            if (chk_fractal.Checked == true)
-            {
-                allPayloads += $"""
-
-        HANDLE thrd_fractal = CreateThread(0, 0, FractalShader, 0, 0, 0);
-        Sleep(timePerEffect * 1000);
-        TerminateThread(thrd_fractal, 0);
-        CloseHandle(thrd_fractal);
-        Sleep(timeInBetween);
-    """;
-            }
-            if (chk_growingShapes.Checked == true)
-            {
-                allPayloads += $"\n    GrowingShapes(timePerEffect);\n    Sleep(timeInBetween);";
-            }
-            if (chk_iconSpam.Checked == true)
-            {
-                allPayloads += $"\n    IconSpam(timePerEffect);\n    Sleep(timeInBetween);";
-            }
-            if (chk_invertSquares.Checked == true)
-            {
-                allPayloads += $"\n    InvertShapes(timePerEffect);\n    Sleep(timeInBetween);";
-            }
-            if (chk_invertSpam.Checked == true)
-            {
-                allPayloads += $"\n    InvertSpam(timePerEffect);\n    Sleep(timeInBetween);";
-            }
-            if (chk_rainbowPuke.Checked == true)
-            {
-                allPayloads += $"""
-
-        HANDLE thrd_rainbow = CreateThread(0, 0, RainbowShader, 0, 0, 0);
-        Sleep(timePerEffect * 1000);
-        TerminateThread(thrd_rainbow, 0);
-        CloseHandle(thrd_rainbow);
-    """;
-            }
-            if (chk_smear.Checked == true)
-            {
-                allPayloads += $"\n    ScreenSmear(timePerEffect);\n    Sleep(timeInBetween);";
-            }
-            if (chk_shake.Checked == true)
-            {
-                allPayloads += $"\n    ScreenShake(timePerEffect);\n    Sleep(timeInBetween);";
-            }
-            if (chk_static.Checked == true)
-            {
-                allPayloads += $"\n    Static(timePerEffect);\n    Sleep(timeInBetween);";
+                if (payloadName == "DvDText")
+                { 
+                    payloadBuilder.AddEffect(payloadName, $"\"{txt_dvdText.Text.Trim('"').Trim()}\", ");
+                }
+                // No good way to add these, but there are only 2
+                else if (payloadName == "FractalShader")
+                {
+                    payloadBuilder.AddThreadedEffect("thrd_fractal", "FractalShader");
+                }
+                else if (payloadName == "RainbowShader")
+                {
+                    payloadBuilder.AddThreadedEffect("thrd_rainbow", "RainbowShader");
+                }
+                else payloadBuilder.AddEffect(payloadName);
             }
 
-            //File.WriteAllText($"{Path.GetTempPath()}\\temp.txt", allPayloads);
-            File.WriteAllText($"{Path.GetTempPath()}\\GDI-GUI-CustomStub.cpp", Resources.stub.Replace("//METHODSHERE", allPayloads));
+            payloadBuilder.BuildFile();
 
             string extraArgs = "";
-            if (chk_blockInput.Checked)
-                extraArgs += "-DBLOCKINPUT ";
-            if (chk_clear.Checked)
-                extraArgs += "-DCLEAR_SCRN ";
-            if (chk_killwalls.Checked)
-                extraArgs += "-DKILL_WALLS";
+            if (chk_blockInput.Checked) extraArgs += "-DBLOCKINPUT ";
+            if (chk_clear.Checked) extraArgs += "-DCLEAR_SCRN ";
+            if (chk_killwalls.Checked) extraArgs += "-DKILL_WALLS";
 
             try
             {
@@ -153,7 +99,9 @@ namespace GDI_GUI
             }
             catch (System.ComponentModel.Win32Exception)
             {
-                MessageBox.Show("ERROR! A g++ compiler does not apear to be installed, please install minGW or Msys64 so I can compile.\n\nIf a compiler is installed, head to the options page to specify the location.\nThank you", "Compiler error!");
+                MessageBox.Show(
+                    "ERROR! A g++ compiler does not appear to be installed, please install MinGW so I can compile.\n\nIf a compiler is installed, please specify the location or add to PATH.",
+                    "Compiler error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -185,38 +133,156 @@ namespace GDI_GUI
             if (!string.IsNullOrEmpty(error))
             {
                 File.WriteAllText("error.txt", error);
-                MessageBox.Show("Error! Dumped to file");
+                MessageBox.Show("Compiler Error! Dumped to file: error.txt\nPlease refer to the github repo for help");
             }
             else
             {
-                MessageBox.Show($"Compilation Suceeded! File Location:\n{outputFilePath}", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DialogResult sucess = MessageBox.Show($"Compilation Suceeded! Do you want to open the file location?", "Success!", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (sucess == DialogResult.Yes)
+                {
+                    Process.Start("explorer.exe", "/select, " + outputFilePath);
+                }
+            }
+
+            File.Delete(CodePath); // Remove temp file
+        }
+
+        private void btn_clear_Click(object sender, EventArgs e)
+        {
+            Directory.Delete(ADH.folderPath, true);
+            lbl_compiler_location.Text = "Default";
+        }
+
+        private void lbl_compiler_location_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog compilerFileSelect = new OpenFileDialog();
+            compilerFileSelect.Title = "Select your g++ compiler";
+            compilerFileSelect.InitialDirectory = @"C:\";
+            compilerFileSelect.Filter = "Exe files (*.exe)|*.exe";
+            compilerFileSelect.ShowDialog();
+            if (compilerFileSelect.FileName != "")
+            {
+                lbl_compiler_location.Text = compilerFileSelect.FileName;
+                ADH.WriteCompilerLocation(lbl_compiler_location.Text);
+            }
+            else
+            {
+                lbl_compiler_location.Text = "Default";
             }
         }
+
+        // timesheet stuff
+#pragma warning disable CS8600, CS8604 // ffs man ITS NOT NULL
+        private void btn_up_Click(object sender, EventArgs e)
+        {
+            if (lst_timesheet.SelectedIndex > 0)
+            {
+                int selectedIndex = lst_timesheet.SelectedIndex;
+
+                String selectedItem = lst_timesheet.SelectedItem as string;
+
+                lst_timesheet.Items.RemoveAt(selectedIndex);
+                lst_timesheet.Items.Insert(selectedIndex - 1, selectedItem);
+
+                lst_timesheet.SelectedIndex = selectedIndex - 1;
+
+                lst_timesheet.Refresh();
+            }
+        }
+
+        private void btn_down_Click(object sender, EventArgs e)
+        {
+            if (lst_timesheet.SelectedIndex > -1 &&
+            lst_timesheet.SelectedIndex < lst_timesheet.Items.Count - 1)
+            {
+                int selectedIndex = lst_timesheet.SelectedIndex;
+
+                String selectedItem = lst_timesheet.SelectedItem as string;
+
+                lst_timesheet.Items.RemoveAt(selectedIndex);
+                lst_timesheet.Items.Insert(selectedIndex + 1, selectedItem);
+
+                lst_timesheet.SelectedIndex = selectedIndex + 1;
+
+                lst_timesheet.Refresh();
+            }
+        }
+
+#pragma warning restore CS8600, CS8604
+        #region checkmark stuff
+
+        // Yea again, idk a better way to do this without lag from a background worker
+        private void chk_tunnel_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chk_tunnel.Checked) lst_timesheet.Items.Add("Tunnel");
+            else lst_timesheet.Items.Remove("Tunnel");
+        }
+
+        private void chk_dvdball_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chk_dvdball.Checked) lst_timesheet.Items.Add("DvDBall");
+            else lst_timesheet.Items.Remove("DvDBall");
+        }
+        private void chk_dvdText_CheckedChanged(object sender, EventArgs e)
+        {
+            txt_dvdText.Visible = chk_dvdText.Checked;
+            if (chk_dvdText.Checked) lst_timesheet.Items.Add("DvDText");
+            else lst_timesheet.Items.Remove("DvDText");
+        }
+
+        private void chk_rainbowPuke_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chk_rainbowPuke.Checked) lst_timesheet.Items.Add("RainbowShader");
+            else lst_timesheet.Items.Remove("RainbowShader");
+        }
+
+        private void chk_static_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chk_static.Checked) lst_timesheet.Items.Add("Static");
+            else lst_timesheet.Items.Remove("Static");
+        }
+
+        private void chk_fractal_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chk_fractal.Checked) lst_timesheet.Items.Add("FractalShader");
+            else lst_timesheet.Items.Remove("Fractal");
+        }
+
+        private void chk_growingShapes_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chk_growingShapes.Checked) lst_timesheet.Items.Add("GrowingShapes");
+            else lst_timesheet.Items.Remove("GrowingShapes");
+        }
+
+        private void chk_smear_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chk_smear.Checked) lst_timesheet.Items.Add("ScreenSmear");
+            else lst_timesheet.Items.Remove("ScreenSmear");
+        }
+
+        private void chk_invertSquares_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chk_invertSquares.Checked) lst_timesheet.Items.Add("InvertShapes");
+            else lst_timesheet.Items.Remove("InvertShapes");
+        }
+
+        private void chk_invertSpam_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chk_invertSpam.Checked) lst_timesheet.Items.Add("InvertSpam");
+            else lst_timesheet.Items.Remove("InvertSpam");
+        }
+
+        private void chk_iconSpam_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chk_iconSpam.Checked) lst_timesheet.Items.Add("IconSpam");
+            else lst_timesheet.Items.Remove("IconSpam");
+        }
+
+        private void chk_shake_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chk_shake.Checked) lst_timesheet.Items.Add("ScreenShake");
+            else lst_timesheet.Items.Remove("ScreenShake");
+        }
+        #endregion
     }
 }
-
-
-
-
-
-
-
-
-
-
-/*
- Shaders are weird and require threads to run, run like this:
-==============================================================
- HANDLE thread = CreateThread(0, 0, ExampleShader, 0, 0, 0);
- Sleep(miliseconds);
- TerminateThread(thread1, 0);
- CloseHandle(thread1);
-==============================================================
-
- Normal effects can be ran by just calling the method:
-==============================================================
- MethodHere(miliseconds);
-threaded:
- std::thread thread = std::thread(MethodHere, miliseconds);
-==============================================================
- */

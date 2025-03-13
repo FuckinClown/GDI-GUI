@@ -22,6 +22,11 @@ namespace GDI_GUI
             folderPath = Path.Combine(appDataPath, "gdi-gui");
             filePath = Path.Combine(folderPath, "compilerLocation.txt");
 
+            EnsureDirectory(folderPath);
+        }
+
+        private void EnsureDirectory(string folderPath)
+        {
             if (!Directory.Exists(folderPath))
             {
                 Directory.CreateDirectory(folderPath);
@@ -30,6 +35,7 @@ namespace GDI_GUI
 
         public void WriteCompilerLocation(string location)
         {
+            EnsureDirectory(folderPath);
             File.WriteAllText(filePath, location);
         }
 
