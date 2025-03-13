@@ -46,10 +46,10 @@ If you are still stuck, please refer to a youtube video or friend's help. Sorry 
 - Shake
 ### Other Options
 - Effect Duration
-- Run all at once | WIP, if this project gets stars I'll work on it
+- Run all at once | WIP
 - Clear Screen | Closes all windows to maxamize effect
 - Kill wallpaper | Live wallpapers mess with the effects
-- Block Input | Requires admin
+- Block Input | **Requires admin**
 
 
 ## Compiler Errors
