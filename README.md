@@ -21,7 +21,7 @@ There is no install unless g++ isnt installed, then follow these instructions:
 2. Scroll down until you see *Help! I don't know which download to choose!*
 3. Click the download link that says *here*, this is the latest version of mingw
 4. Extract the file into your C drive so that the path reads as: C:\mingw64
-5. Add the bin folder to your path: Environment Variables -> System Variables -> Path -> Edit -> New -> Type: C:\mingw64\bin
+5. Add the bin folder to your path: Environment Variables -> System Variables -> Path -> Edit -> New -> C:\mingw64\bin
 
  
 If the latest version does not work, download [this version](https://github.com/brechtsanders/winlibs_mingw/releases/download/14.2.0posix-12.0.0-ucrt-r3/winlibs-x86_64-posix-seh-gcc-14.2.0-llvm-19.1.7-mingw-w64ucrt-12.0.0-r3.7z), I used this while building the program
