@@ -35,7 +35,7 @@
             chk_dvdText = new CheckBox();
             txt_dvdText = new TextBox();
             btn_build = new Button();
-            chk_growingShapes = new CheckBox();
+            chk_growingSquares = new CheckBox();
             chk_fractal = new CheckBox();
             chk_static = new CheckBox();
             chk_invertSquares = new CheckBox();
@@ -64,12 +64,19 @@
             lbl_underline1 = new Label();
             lbl_compiler_loc_title = new Label();
             box_payloads = new GroupBox();
+            num_runaway = new NumericUpDown();
+            txt_runaway_speed = new Label();
+            chk_runaway = new CheckBox();
+            num_dvdball = new NumericUpDown();
+            lbl_dvdball_size = new Label();
             ((System.ComponentModel.ISupportInitialize)num_time).BeginInit();
             box_options.SuspendLayout();
             titleBar.SuspendLayout();
             box_timesheet.SuspendLayout();
             box_build.SuspendLayout();
             box_payloads.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)num_runaway).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)num_dvdball).BeginInit();
             SuspendLayout();
             // 
             // lbl_Title
@@ -86,7 +93,7 @@
             // chk_tunnel
             // 
             chk_tunnel.AutoSize = true;
-            chk_tunnel.Location = new Point(6, 22);
+            chk_tunnel.Location = new Point(5, 15);
             chk_tunnel.Name = "chk_tunnel";
             chk_tunnel.Size = new Size(62, 19);
             chk_tunnel.TabIndex = 1;
@@ -97,7 +104,7 @@
             // lbl_pleasedontremove
             // 
             lbl_pleasedontremove.AutoSize = true;
-            lbl_pleasedontremove.Location = new Point(470, 9);
+            lbl_pleasedontremove.Location = new Point(82, 106);
             lbl_pleasedontremove.Name = "lbl_pleasedontremove";
             lbl_pleasedontremove.Size = new Size(94, 15);
             lbl_pleasedontremove.TabIndex = 2;
@@ -106,7 +113,7 @@
             // chk_dvdball
             // 
             chk_dvdball.AutoSize = true;
-            chk_dvdball.Location = new Point(6, 47);
+            chk_dvdball.Location = new Point(5, 40);
             chk_dvdball.Name = "chk_dvdball";
             chk_dvdball.Size = new Size(71, 19);
             chk_dvdball.TabIndex = 3;
@@ -117,7 +124,7 @@
             // chk_dvdText
             // 
             chk_dvdText.AutoSize = true;
-            chk_dvdText.Location = new Point(6, 72);
+            chk_dvdText.Location = new Point(5, 65);
             chk_dvdText.Name = "chk_dvdText";
             chk_dvdText.Size = new Size(73, 19);
             chk_dvdText.TabIndex = 4;
@@ -129,9 +136,9 @@
             // 
             txt_dvdText.BackColor = Color.FromArgb(17, 17, 17);
             txt_dvdText.ForeColor = Color.Silver;
-            txt_dvdText.Location = new Point(84, 70);
+            txt_dvdText.Location = new Point(83, 63);
             txt_dvdText.Name = "txt_dvdText";
-            txt_dvdText.Size = new Size(93, 23);
+            txt_dvdText.Size = new Size(119, 23);
             txt_dvdText.TabIndex = 5;
             txt_dvdText.Text = "oops!";
             txt_dvdText.Visible = false;
@@ -144,7 +151,7 @@
             btn_build.FlatStyle = FlatStyle.Flat;
             btn_build.Font = new Font("Segoe UI", 9F);
             btn_build.ForeColor = Color.WhiteSmoke;
-            btn_build.Location = new Point(6, 78);
+            btn_build.Location = new Point(6, 88);
             btn_build.Name = "btn_build";
             btn_build.Size = new Size(75, 28);
             btn_build.TabIndex = 6;
@@ -152,21 +159,21 @@
             btn_build.UseVisualStyleBackColor = false;
             btn_build.Click += btn_build_Click;
             // 
-            // chk_growingShapes
+            // chk_growingSquares
             // 
-            chk_growingShapes.AutoSize = true;
-            chk_growingShapes.Location = new Point(186, 15);
-            chk_growingShapes.Name = "chk_growingShapes";
-            chk_growingShapes.Size = new Size(111, 19);
-            chk_growingShapes.TabIndex = 9;
-            chk_growingShapes.Text = "Growing Shapes";
-            chk_growingShapes.UseVisualStyleBackColor = true;
-            chk_growingShapes.CheckedChanged += chk_growingShapes_CheckedChanged;
+            chk_growingSquares.AutoSize = true;
+            chk_growingSquares.Location = new Point(209, 15);
+            chk_growingSquares.Name = "chk_growingSquares";
+            chk_growingSquares.Size = new Size(115, 19);
+            chk_growingSquares.TabIndex = 9;
+            chk_growingSquares.Text = "Growing Squares";
+            chk_growingSquares.UseVisualStyleBackColor = true;
+            chk_growingSquares.CheckedChanged += chk_growingSquares_CheckedChanged;
             // 
             // chk_fractal
             // 
             chk_fractal.AutoSize = true;
-            chk_fractal.Location = new Point(6, 145);
+            chk_fractal.Location = new Point(5, 140);
             chk_fractal.Name = "chk_fractal";
             chk_fractal.Size = new Size(61, 19);
             chk_fractal.TabIndex = 8;
@@ -177,7 +184,7 @@
             // chk_static
             // 
             chk_static.AutoSize = true;
-            chk_static.Location = new Point(6, 122);
+            chk_static.Location = new Point(208, 138);
             chk_static.Name = "chk_static";
             chk_static.Size = new Size(55, 19);
             chk_static.TabIndex = 7;
@@ -188,7 +195,7 @@
             // chk_invertSquares
             // 
             chk_invertSquares.AutoSize = true;
-            chk_invertSquares.Location = new Point(186, 65);
+            chk_invertSquares.Location = new Point(209, 63);
             chk_invertSquares.Name = "chk_invertSquares";
             chk_invertSquares.Size = new Size(100, 19);
             chk_invertSquares.TabIndex = 10;
@@ -199,7 +206,7 @@
             // chk_invertSpam
             // 
             chk_invertSpam.AutoSize = true;
-            chk_invertSpam.Location = new Point(186, 90);
+            chk_invertSpam.Location = new Point(208, 88);
             chk_invertSpam.Name = "chk_invertSpam";
             chk_invertSpam.Size = new Size(89, 19);
             chk_invertSpam.TabIndex = 11;
@@ -210,7 +217,7 @@
             // chk_iconSpam
             // 
             chk_iconSpam.AutoSize = true;
-            chk_iconSpam.Location = new Point(186, 115);
+            chk_iconSpam.Location = new Point(208, 113);
             chk_iconSpam.Name = "chk_iconSpam";
             chk_iconSpam.Size = new Size(82, 19);
             chk_iconSpam.TabIndex = 12;
@@ -231,7 +238,7 @@
             // 
             num_time.BackColor = Color.FromArgb(17, 17, 17);
             num_time.ForeColor = Color.Silver;
-            num_time.Location = new Point(7, 37);
+            num_time.Location = new Point(116, 17);
             num_time.Name = "num_time";
             num_time.Size = new Size(86, 23);
             num_time.TabIndex = 14;
@@ -240,7 +247,7 @@
             // chk_synchronis
             // 
             chk_synchronis.AutoSize = true;
-            chk_synchronis.Location = new Point(6, 66);
+            chk_synchronis.Location = new Point(14, 47);
             chk_synchronis.Name = "chk_synchronis";
             chk_synchronis.Size = new Size(128, 19);
             chk_synchronis.TabIndex = 15;
@@ -251,7 +258,7 @@
             // chk_blockInput
             // 
             chk_blockInput.AutoSize = true;
-            chk_blockInput.Location = new Point(135, 68);
+            chk_blockInput.Location = new Point(141, 78);
             chk_blockInput.Name = "chk_blockInput";
             chk_blockInput.Size = new Size(121, 19);
             chk_blockInput.TabIndex = 16;
@@ -261,7 +268,7 @@
             // chk_rainbowPuke
             // 
             chk_rainbowPuke.AutoSize = true;
-            chk_rainbowPuke.Location = new Point(6, 97);
+            chk_rainbowPuke.Location = new Point(5, 90);
             chk_rainbowPuke.Name = "chk_rainbowPuke";
             chk_rainbowPuke.Size = new Size(101, 19);
             chk_rainbowPuke.TabIndex = 17;
@@ -272,7 +279,7 @@
             // chk_smear
             // 
             chk_smear.AutoSize = true;
-            chk_smear.Location = new Point(186, 40);
+            chk_smear.Location = new Point(209, 40);
             chk_smear.Name = "chk_smear";
             chk_smear.Size = new Size(59, 19);
             chk_smear.TabIndex = 18;
@@ -283,7 +290,7 @@
             // chk_killwalls
             // 
             chk_killwalls.AutoSize = true;
-            chk_killwalls.Location = new Point(135, 43);
+            chk_killwalls.Location = new Point(141, 47);
             chk_killwalls.Name = "chk_killwalls";
             chk_killwalls.Size = new Size(98, 19);
             chk_killwalls.TabIndex = 19;
@@ -293,7 +300,7 @@
             // chk_clear
             // 
             chk_clear.AutoSize = true;
-            chk_clear.Location = new Point(135, 18);
+            chk_clear.Location = new Point(14, 78);
             chk_clear.Name = "chk_clear";
             chk_clear.Size = new Size(91, 19);
             chk_clear.TabIndex = 20;
@@ -303,7 +310,7 @@
             // chk_shake
             // 
             chk_shake.AutoSize = true;
-            chk_shake.Location = new Point(186, 140);
+            chk_shake.Location = new Point(267, 138);
             chk_shake.Name = "chk_shake";
             chk_shake.Size = new Size(57, 19);
             chk_shake.TabIndex = 21;
@@ -315,6 +322,7 @@
             // 
             box_options.Controls.Add(lbl_time);
             box_options.Controls.Add(num_time);
+            box_options.Controls.Add(lbl_pleasedontremove);
             box_options.Controls.Add(chk_clear);
             box_options.Controls.Add(chk_killwalls);
             box_options.Controls.Add(chk_synchronis);
@@ -331,7 +339,6 @@
             // 
             titleBar.Controls.Add(btn_minimize);
             titleBar.Controls.Add(btn_close);
-            titleBar.Controls.Add(lbl_pleasedontremove);
             titleBar.Controls.Add(lbl_Title);
             titleBar.Dock = DockStyle.Top;
             titleBar.Location = new Point(0, 0);
@@ -372,9 +379,9 @@
             box_timesheet.Controls.Add(btn_up);
             box_timesheet.Controls.Add(lst_timesheet);
             box_timesheet.ForeColor = Color.WhiteSmoke;
-            box_timesheet.Location = new Point(314, 24);
+            box_timesheet.Location = new Point(341, 24);
             box_timesheet.Name = "box_timesheet";
-            box_timesheet.Size = new Size(303, 170);
+            box_timesheet.Size = new Size(276, 170);
             box_timesheet.TabIndex = 24;
             box_timesheet.TabStop = false;
             box_timesheet.Text = "Timesheet";
@@ -387,7 +394,7 @@
             btn_down.FlatAppearance.BorderSize = 2;
             btn_down.FlatStyle = FlatStyle.Flat;
             btn_down.ForeColor = Color.White;
-            btn_down.Location = new Point(272, 53);
+            btn_down.Location = new Point(251, 46);
             btn_down.Name = "btn_down";
             btn_down.Size = new Size(25, 25);
             btn_down.TabIndex = 2;
@@ -402,7 +409,7 @@
             btn_up.FlatAppearance.BorderSize = 2;
             btn_up.FlatStyle = FlatStyle.Flat;
             btn_up.ForeColor = Color.White;
-            btn_up.Location = new Point(272, 22);
+            btn_up.Location = new Point(251, 15);
             btn_up.Name = "btn_up";
             btn_up.Size = new Size(25, 25);
             btn_up.TabIndex = 1;
@@ -419,7 +426,7 @@
             lst_timesheet.ItemHeight = 18;
             lst_timesheet.Location = new Point(6, 15);
             lst_timesheet.Name = "lst_timesheet";
-            lst_timesheet.Size = new Size(260, 146);
+            lst_timesheet.Size = new Size(239, 146);
             lst_timesheet.TabIndex = 0;
             // 
             // box_build
@@ -442,7 +449,7 @@
             btn_clear.BackColor = Color.FromArgb(17, 17, 17);
             btn_clear.FlatStyle = FlatStyle.Flat;
             btn_clear.ForeColor = Color.DarkGray;
-            btn_clear.Location = new Point(256, 78);
+            btn_clear.Location = new Point(256, 88);
             btn_clear.Name = "btn_clear";
             btn_clear.Size = new Size(75, 28);
             btn_clear.TabIndex = 10;
@@ -482,6 +489,11 @@
             // 
             // box_payloads
             // 
+            box_payloads.Controls.Add(num_runaway);
+            box_payloads.Controls.Add(txt_runaway_speed);
+            box_payloads.Controls.Add(chk_runaway);
+            box_payloads.Controls.Add(num_dvdball);
+            box_payloads.Controls.Add(lbl_dvdball_size);
             box_payloads.Controls.Add(chk_tunnel);
             box_payloads.Controls.Add(chk_dvdball);
             box_payloads.Controls.Add(chk_dvdText);
@@ -493,15 +505,69 @@
             box_payloads.Controls.Add(chk_iconSpam);
             box_payloads.Controls.Add(chk_smear);
             box_payloads.Controls.Add(chk_invertSpam);
-            box_payloads.Controls.Add(chk_growingShapes);
+            box_payloads.Controls.Add(chk_growingSquares);
             box_payloads.Controls.Add(chk_invertSquares);
             box_payloads.ForeColor = Color.WhiteSmoke;
             box_payloads.Location = new Point(5, 24);
             box_payloads.Name = "box_payloads";
-            box_payloads.Size = new Size(303, 170);
+            box_payloads.Size = new Size(330, 170);
             box_payloads.TabIndex = 25;
             box_payloads.TabStop = false;
             box_payloads.Text = "Payloads";
+            // 
+            // num_runaway
+            // 
+            num_runaway.BackColor = Color.FromArgb(17, 17, 17);
+            num_runaway.ForeColor = Color.Silver;
+            num_runaway.Location = new Point(147, 114);
+            num_runaway.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
+            num_runaway.Name = "num_runaway";
+            num_runaway.Size = new Size(55, 23);
+            num_runaway.TabIndex = 26;
+            num_runaway.Value = new decimal(new int[] { 10, 0, 0, 0 });
+            num_runaway.Visible = false;
+            // 
+            // txt_runaway_speed
+            // 
+            txt_runaway_speed.AutoSize = true;
+            txt_runaway_speed.Location = new Point(112, 117);
+            txt_runaway_speed.Name = "txt_runaway_speed";
+            txt_runaway_speed.Size = new Size(30, 15);
+            txt_runaway_speed.TabIndex = 25;
+            txt_runaway_speed.Text = "Size:";
+            txt_runaway_speed.Visible = false;
+            // 
+            // chk_runaway
+            // 
+            chk_runaway.AutoSize = true;
+            chk_runaway.Location = new Point(5, 115);
+            chk_runaway.Name = "chk_runaway";
+            chk_runaway.Size = new Size(112, 19);
+            chk_runaway.TabIndex = 24;
+            chk_runaway.Text = "Runaway Screen";
+            chk_runaway.UseVisualStyleBackColor = true;
+            chk_runaway.CheckedChanged += chk_runaway_CheckedChanged;
+            // 
+            // num_dvdball
+            // 
+            num_dvdball.BackColor = Color.FromArgb(17, 17, 17);
+            num_dvdball.ForeColor = Color.Silver;
+            num_dvdball.Location = new Point(112, 38);
+            num_dvdball.Name = "num_dvdball";
+            num_dvdball.Size = new Size(67, 23);
+            num_dvdball.TabIndex = 23;
+            num_dvdball.Value = new decimal(new int[] { 100, 0, 0, 0 });
+            num_dvdball.Visible = false;
+            // 
+            // lbl_dvdball_size
+            // 
+            lbl_dvdball_size.AutoSize = true;
+            lbl_dvdball_size.Location = new Point(77, 41);
+            lbl_dvdball_size.Name = "lbl_dvdball_size";
+            lbl_dvdball_size.Size = new Size(30, 15);
+            lbl_dvdball_size.TabIndex = 22;
+            lbl_dvdball_size.Text = "Size:";
+            lbl_dvdball_size.Visible = false;
             // 
             // frm_Main
             // 
@@ -530,6 +596,8 @@
             box_build.PerformLayout();
             box_payloads.ResumeLayout(false);
             box_payloads.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)num_runaway).EndInit();
+            ((System.ComponentModel.ISupportInitialize)num_dvdball).EndInit();
             ResumeLayout(false);
         }
 
@@ -542,7 +610,7 @@
         private CheckBox chk_dvdText;
         private TextBox txt_dvdText;
         private Button btn_build;
-        private CheckBox chk_growingShapes;
+        private CheckBox chk_growingSquares;
         private CheckBox chk_fractal;
         private CheckBox chk_static;
         private CheckBox chk_invertSquares;
@@ -571,5 +639,10 @@
         private Label lbl_compiler_location;
         private Label lbl_underline1;
         private Button btn_clear;
+        private Label lbl_dvdball_size;
+        private NumericUpDown num_dvdball;
+        private CheckBox chk_runaway;
+        private NumericUpDown num_runaway;
+        private Label txt_runaway_speed;
     }
 }

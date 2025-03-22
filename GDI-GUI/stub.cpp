@@ -154,10 +154,12 @@ void ScreenShake(int totalTime) {
     }
 }
 
-void DvDBall(int totalTime) {
-    int x = screenWidth / 2;
-    double y = (screenHeight / 2) + 500;
-    int size = 169;
+void DvDBall(int size, int totalTime) {
+    int screenWidth = GetSystemMetrics(SM_CXSCREEN) - size;
+    int screenHeight = GetSystemMetrics(SM_CYSCREEN) - size;
+    srand(time(0));
+    int x = rand() % screenWidth;
+    double y = rand() % screenHeight;
     bool hitTops = false;
     bool hitSide = false;
     bool switchTops = false;
@@ -209,7 +211,7 @@ void DvDBall(int totalTime) {
         SelectObject(hdc, brush);
         Ellipse(hdc, x, static_cast<int>(y), size + x, size + static_cast<int>(y));
         ReleaseDC(nullptr, hdc);
-        Sleep(10);
+        Sleep(4);
     }
 }
 
@@ -270,7 +272,7 @@ void DvDText(LPCSTR customText, int totalTime) {
     }
 }
 
-void GrowingShapes(int totalTime) {
+void GrowingSquares(int totalTime) {
     int sw = GetSystemMetrics(SM_CXSCREEN);
     int sh = GetSystemMetrics(SM_CYSCREEN);
     auto startTime = GetTickCount64();
@@ -300,7 +302,7 @@ void GrowingShapes(int totalTime) {
     }
 }
 
-void InvertShapes(int totalTime) {
+void InvertSquares(int totalTime) {
     int sw = GetSystemMetrics(SM_CXSCREEN);
     int sh = GetSystemMetrics(SM_CYSCREEN);
     auto startTime = GetTickCount64();
@@ -342,6 +344,46 @@ void InvertSpam(int totalTime) {
     }
 }
 
+void RunawayScreen(double speed, int totalTime) {
+    auto startTime = GetTickCount64();
+    int w = GetSystemMetrics(SM_CXSCREEN);
+    int h = GetSystemMetrics(SM_CYSCREEN);
+    
+    while (true) {
+        auto currentTime = GetTickCount64();
+        auto elapsedTime = (currentTime - startTime) / 1000;
+        if (elapsedTime >= totalTime) {
+            break;
+        }
+
+        HDC hdc = GetDC(0);
+        HDC hdcMem = CreateCompatibleDC(hdc);
+        HBITMAP hbm = CreateCompatibleBitmap(hdc, w, h);
+        SelectObject(hdcMem, hbm);
+
+        BitBlt(hdcMem, 0, 0, w, h, hdc, 0, 0, SRCCOPY);
+        BitBlt(hdc, 0, 0, w, h, NULL, 0, 0, BLACKNESS);
+
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                BitBlt(hdc, 
+                    (i * w) + speed,
+                    (j * h) + speed,
+                    w, h,
+                    hdcMem,
+                    0, 0,
+                    SRCCOPY);
+            }
+        }
+
+        DeleteObject(hbm);
+        DeleteDC(hdcMem);
+        ReleaseDC(NULL, hdc);
+
+        Sleep(10);
+    }
+}
+
 DWORD WINAPI RainbowShader(LPVOID lpParam) {
     int w = GetSystemMetrics(0), h = GetSystemMetrics(1);
 
@@ -359,13 +401,6 @@ DWORD WINAPI RainbowShader(LPVOID lpParam) {
 
         int cc = 1;
         for (int i = 0; i < w * h; i++) {
-            // Do some math
-            /*int x = i % w;
-            int y = i & h;
-            int total = (x ^ y & i)&cc;
-            data[i].rgb -= total;
-            cc += 20;*/
-
             int x = i + w;
             int y = i + h;
             int total = (x / y) | 50000;
@@ -400,7 +435,7 @@ DWORD WINAPI FractalShader(LPVOID lpParam) {
         int cc = 1000;
         for (int i = 0; i < w * h; i++) {
 
-            int total = ((i*2) & (i / h)) | cc;// &cc;
+            int total = ((i*2) & (i / h)) | cc;
             data[i].rgb -= total;
             cc = cc % 200;
         }

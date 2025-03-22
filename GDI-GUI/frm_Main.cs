@@ -68,11 +68,19 @@ namespace GDI_GUI
             // Regular Effects
             foreach (string payloadName in lst_timesheet.Items)
             {
+                // No good way to do special cases, but there arent many
                 if (payloadName == "DvDText")
-                { 
+                {
                     payloadBuilder.AddEffect(payloadName, $"\"{txt_dvdText.Text.Trim('"').Trim()}\", ");
                 }
-                // No good way to add these, but there are only 2
+                else if (payloadName == "DvDBall")
+                {
+                    payloadBuilder.AddEffect(payloadName, $"{num_dvdball.Value}, ");
+                }
+                else if (payloadName == "RunawayScreen")
+                {
+                    payloadBuilder.AddEffect(payloadName, $"{num_runaway.Value}, ");
+                }
                 else if (payloadName == "FractalShader")
                 {
                     payloadBuilder.AddThreadedEffect("thrd_fractal", "FractalShader");
@@ -218,14 +226,25 @@ namespace GDI_GUI
 
         private void chk_dvdball_CheckedChanged(object sender, EventArgs e)
         {
+            lbl_dvdball_size.Visible = num_dvdball.Visible = chk_dvdball.Checked;
+
             if (chk_dvdball.Checked) lst_timesheet.Items.Add("DvDBall");
             else lst_timesheet.Items.Remove("DvDBall");
         }
+
         private void chk_dvdText_CheckedChanged(object sender, EventArgs e)
         {
             txt_dvdText.Visible = chk_dvdText.Checked;
             if (chk_dvdText.Checked) lst_timesheet.Items.Add("DvDText");
             else lst_timesheet.Items.Remove("DvDText");
+        }
+
+        private void chk_runaway_CheckedChanged(object sender, EventArgs e)
+        {
+            txt_runaway_speed.Visible = num_runaway.Visible = chk_runaway.Checked;
+
+            if (chk_runaway.Checked) lst_timesheet.Items.Add("RunawayScreen");
+            else lst_timesheet.Items.Remove("RunawayScreen");
         }
 
         private void chk_rainbowPuke_CheckedChanged(object sender, EventArgs e)
@@ -246,10 +265,10 @@ namespace GDI_GUI
             else lst_timesheet.Items.Remove("FractalShader");
         }
 
-        private void chk_growingShapes_CheckedChanged(object sender, EventArgs e)
+        private void chk_growingSquares_CheckedChanged(object sender, EventArgs e)
         {
-            if (chk_growingShapes.Checked) lst_timesheet.Items.Add("GrowingShapes");
-            else lst_timesheet.Items.Remove("GrowingShapes");
+            if (chk_growingSquares.Checked) lst_timesheet.Items.Add("GrowingSquares");
+            else lst_timesheet.Items.Remove("GrowingSquares");
         }
 
         private void chk_smear_CheckedChanged(object sender, EventArgs e)
@@ -260,8 +279,8 @@ namespace GDI_GUI
 
         private void chk_invertSquares_CheckedChanged(object sender, EventArgs e)
         {
-            if (chk_invertSquares.Checked) lst_timesheet.Items.Add("InvertShapes");
-            else lst_timesheet.Items.Remove("InvertShapes");
+            if (chk_invertSquares.Checked) lst_timesheet.Items.Add("InvertSquares");
+            else lst_timesheet.Items.Remove("InvertSquares");
         }
 
         private void chk_invertSpam_CheckedChanged(object sender, EventArgs e)

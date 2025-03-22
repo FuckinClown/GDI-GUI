@@ -27,7 +27,6 @@ namespace GDI_GUI
             }
             else
             {
-                //std::thread StaticThread = std::thread(Static, 150000000);
                 payloadCode.AppendLine($"    auto thr_{functionName} = std::thread({functionName},{parameters} timePerEffect);");
             }
 
