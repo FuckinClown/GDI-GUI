@@ -69,6 +69,7 @@
             chk_runaway = new CheckBox();
             num_dvdball = new NumericUpDown();
             lbl_dvdball_size = new Label();
+            chk_squarefractal = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)num_time).BeginInit();
             box_options.SuspendLayout();
             titleBar.SuspendLayout();
@@ -113,7 +114,7 @@
             // chk_dvdball
             // 
             chk_dvdball.AutoSize = true;
-            chk_dvdball.Location = new Point(5, 40);
+            chk_dvdball.Location = new Point(5, 138);
             chk_dvdball.Name = "chk_dvdball";
             chk_dvdball.Size = new Size(71, 19);
             chk_dvdball.TabIndex = 3;
@@ -124,7 +125,7 @@
             // chk_dvdText
             // 
             chk_dvdText.AutoSize = true;
-            chk_dvdText.Location = new Point(5, 65);
+            chk_dvdText.Location = new Point(5, 186);
             chk_dvdText.Name = "chk_dvdText";
             chk_dvdText.Size = new Size(73, 19);
             chk_dvdText.TabIndex = 4;
@@ -136,9 +137,9 @@
             // 
             txt_dvdText.BackColor = Color.FromArgb(17, 17, 17);
             txt_dvdText.ForeColor = Color.Silver;
-            txt_dvdText.Location = new Point(83, 63);
+            txt_dvdText.Location = new Point(83, 184);
             txt_dvdText.Name = "txt_dvdText";
-            txt_dvdText.Size = new Size(119, 23);
+            txt_dvdText.Size = new Size(136, 23);
             txt_dvdText.TabIndex = 5;
             txt_dvdText.Text = "oops!";
             txt_dvdText.Visible = false;
@@ -173,7 +174,7 @@
             // chk_fractal
             // 
             chk_fractal.AutoSize = true;
-            chk_fractal.Location = new Point(5, 140);
+            chk_fractal.Location = new Point(5, 63);
             chk_fractal.Name = "chk_fractal";
             chk_fractal.Size = new Size(61, 19);
             chk_fractal.TabIndex = 8;
@@ -184,7 +185,7 @@
             // chk_static
             // 
             chk_static.AutoSize = true;
-            chk_static.Location = new Point(208, 138);
+            chk_static.Location = new Point(207, 135);
             chk_static.Name = "chk_static";
             chk_static.Size = new Size(55, 19);
             chk_static.TabIndex = 7;
@@ -268,7 +269,7 @@
             // chk_rainbowPuke
             // 
             chk_rainbowPuke.AutoSize = true;
-            chk_rainbowPuke.Location = new Point(5, 90);
+            chk_rainbowPuke.Location = new Point(5, 40);
             chk_rainbowPuke.Name = "chk_rainbowPuke";
             chk_rainbowPuke.Size = new Size(101, 19);
             chk_rainbowPuke.TabIndex = 17;
@@ -310,7 +311,7 @@
             // chk_shake
             // 
             chk_shake.AutoSize = true;
-            chk_shake.Location = new Point(267, 138);
+            chk_shake.Location = new Point(5, 113);
             chk_shake.Name = "chk_shake";
             chk_shake.Size = new Size(57, 19);
             chk_shake.TabIndex = 21;
@@ -328,7 +329,7 @@
             box_options.Controls.Add(chk_synchronis);
             box_options.Controls.Add(chk_blockInput);
             box_options.ForeColor = Color.White;
-            box_options.Location = new Point(5, 200);
+            box_options.Location = new Point(5, 247);
             box_options.Name = "box_options";
             box_options.Size = new Size(268, 124);
             box_options.TabIndex = 22;
@@ -381,7 +382,7 @@
             box_timesheet.ForeColor = Color.WhiteSmoke;
             box_timesheet.Location = new Point(341, 24);
             box_timesheet.Name = "box_timesheet";
-            box_timesheet.Size = new Size(276, 170);
+            box_timesheet.Size = new Size(276, 217);
             box_timesheet.TabIndex = 24;
             box_timesheet.TabStop = false;
             box_timesheet.Text = "Timesheet";
@@ -394,7 +395,7 @@
             btn_down.FlatAppearance.BorderSize = 2;
             btn_down.FlatStyle = FlatStyle.Flat;
             btn_down.ForeColor = Color.White;
-            btn_down.Location = new Point(251, 46);
+            btn_down.Location = new Point(244, 113);
             btn_down.Name = "btn_down";
             btn_down.Size = new Size(25, 25);
             btn_down.TabIndex = 2;
@@ -409,7 +410,7 @@
             btn_up.FlatAppearance.BorderSize = 2;
             btn_up.FlatStyle = FlatStyle.Flat;
             btn_up.ForeColor = Color.White;
-            btn_up.Location = new Point(251, 15);
+            btn_up.Location = new Point(244, 82);
             btn_up.Name = "btn_up";
             btn_up.Size = new Size(25, 25);
             btn_up.TabIndex = 1;
@@ -426,7 +427,7 @@
             lst_timesheet.ItemHeight = 18;
             lst_timesheet.Location = new Point(6, 15);
             lst_timesheet.Name = "lst_timesheet";
-            lst_timesheet.Size = new Size(239, 146);
+            lst_timesheet.Size = new Size(233, 200);
             lst_timesheet.TabIndex = 0;
             // 
             // box_build
@@ -437,7 +438,7 @@
             box_build.Controls.Add(lbl_compiler_loc_title);
             box_build.Controls.Add(btn_build);
             box_build.ForeColor = Color.WhiteSmoke;
-            box_build.Location = new Point(279, 200);
+            box_build.Location = new Point(279, 247);
             box_build.Name = "box_build";
             box_build.Size = new Size(338, 124);
             box_build.TabIndex = 26;
@@ -483,12 +484,13 @@
             lbl_compiler_loc_title.AutoSize = true;
             lbl_compiler_loc_title.Location = new Point(6, 18);
             lbl_compiler_loc_title.Name = "lbl_compiler_loc_title";
-            lbl_compiler_loc_title.Size = new Size(108, 15);
+            lbl_compiler_loc_title.Size = new Size(135, 15);
             lbl_compiler_loc_title.TabIndex = 7;
-            lbl_compiler_loc_title.Text = "Compiler Location:";
+            lbl_compiler_loc_title.Text = "G++ Compiler Location:";
             // 
             // box_payloads
             // 
+            box_payloads.Controls.Add(chk_squarefractal);
             box_payloads.Controls.Add(num_runaway);
             box_payloads.Controls.Add(txt_runaway_speed);
             box_payloads.Controls.Add(chk_runaway);
@@ -510,7 +512,7 @@
             box_payloads.ForeColor = Color.WhiteSmoke;
             box_payloads.Location = new Point(5, 24);
             box_payloads.Name = "box_payloads";
-            box_payloads.Size = new Size(330, 170);
+            box_payloads.Size = new Size(330, 217);
             box_payloads.TabIndex = 25;
             box_payloads.TabStop = false;
             box_payloads.Text = "Payloads";
@@ -519,8 +521,8 @@
             // 
             num_runaway.BackColor = Color.FromArgb(17, 17, 17);
             num_runaway.ForeColor = Color.Silver;
-            num_runaway.Location = new Point(147, 114);
-            num_runaway.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
+            num_runaway.Location = new Point(164, 160);
+            num_runaway.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             num_runaway.Name = "num_runaway";
             num_runaway.Size = new Size(55, 23);
             num_runaway.TabIndex = 26;
@@ -530,17 +532,18 @@
             // txt_runaway_speed
             // 
             txt_runaway_speed.AutoSize = true;
-            txt_runaway_speed.Location = new Point(112, 117);
+            txt_runaway_speed.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            txt_runaway_speed.Location = new Point(118, 163);
             txt_runaway_speed.Name = "txt_runaway_speed";
-            txt_runaway_speed.Size = new Size(30, 15);
+            txt_runaway_speed.Size = new Size(45, 15);
             txt_runaway_speed.TabIndex = 25;
-            txt_runaway_speed.Text = "Size:";
+            txt_runaway_speed.Text = "Speed:";
             txt_runaway_speed.Visible = false;
             // 
             // chk_runaway
             // 
             chk_runaway.AutoSize = true;
-            chk_runaway.Location = new Point(5, 115);
+            chk_runaway.Location = new Point(5, 161);
             chk_runaway.Name = "chk_runaway";
             chk_runaway.Size = new Size(112, 19);
             chk_runaway.TabIndex = 24;
@@ -552,29 +555,43 @@
             // 
             num_dvdball.BackColor = Color.FromArgb(17, 17, 17);
             num_dvdball.ForeColor = Color.Silver;
-            num_dvdball.Location = new Point(112, 38);
+            num_dvdball.Location = new Point(112, 136);
+            num_dvdball.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            num_dvdball.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             num_dvdball.Name = "num_dvdball";
             num_dvdball.Size = new Size(67, 23);
             num_dvdball.TabIndex = 23;
-            num_dvdball.Value = new decimal(new int[] { 100, 0, 0, 0 });
+            num_dvdball.Value = new decimal(new int[] { 170, 0, 0, 0 });
             num_dvdball.Visible = false;
             // 
             // lbl_dvdball_size
             // 
             lbl_dvdball_size.AutoSize = true;
-            lbl_dvdball_size.Location = new Point(77, 41);
+            lbl_dvdball_size.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lbl_dvdball_size.Location = new Point(77, 139);
             lbl_dvdball_size.Name = "lbl_dvdball_size";
-            lbl_dvdball_size.Size = new Size(30, 15);
+            lbl_dvdball_size.Size = new Size(33, 15);
             lbl_dvdball_size.TabIndex = 22;
             lbl_dvdball_size.Text = "Size:";
             lbl_dvdball_size.Visible = false;
+            // 
+            // chk_squarefractal
+            // 
+            chk_squarefractal.AutoSize = true;
+            chk_squarefractal.Location = new Point(5, 88);
+            chk_squarefractal.Name = "chk_squarefractal";
+            chk_squarefractal.Size = new Size(100, 19);
+            chk_squarefractal.TabIndex = 27;
+            chk_squarefractal.Text = "Square Fractal";
+            chk_squarefractal.UseVisualStyleBackColor = true;
+            chk_squarefractal.CheckedChanged += chk_squarefractal_CheckedChanged;
             // 
             // frm_Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(17, 17, 17);
-            ClientSize = new Size(622, 336);
+            ClientSize = new Size(622, 383);
             Controls.Add(box_payloads);
             Controls.Add(box_timesheet);
             Controls.Add(box_build);
@@ -644,5 +661,6 @@
         private CheckBox chk_runaway;
         private NumericUpDown num_runaway;
         private Label txt_runaway_speed;
+        private CheckBox chk_squarefractal;
     }
 }

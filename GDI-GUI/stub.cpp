@@ -19,6 +19,15 @@ typedef union _RGBQUAD {
     };
 } *PRGBQUAD;
 
+typedef union COLOR {
+    COLORREF rgb;
+    struct {
+        BYTE blue;
+        BYTE green;
+        BYTE red;
+    };
+} COLOR;
+
 int cnt = 0;
 int screenWidth = GetSystemMetrics(SM_CXSCREEN);
 int screenHeight = GetSystemMetrics(SM_CYSCREEN);
@@ -63,7 +72,6 @@ void Static(int totalTime) {
         auto hdc = GetDC(nullptr);
         BitBlt(hdc, 0, 0, screenWidth, screenHeight, hdc, (rand() % 25) - 12, (rand() % 25) - 12, SRCINVERT);
         ReleaseDC(nullptr, hdc);
-        Sleep(1);
     }
 }
 
@@ -211,7 +219,7 @@ void DvDBall(int size, int totalTime) {
         SelectObject(hdc, brush);
         Ellipse(hdc, x, static_cast<int>(y), size + x, size + static_cast<int>(y));
         ReleaseDC(nullptr, hdc);
-        Sleep(4);
+        Sleep(10);
     }
 }
 
@@ -273,14 +281,12 @@ void DvDText(LPCSTR customText, int totalTime) {
 }
 
 void GrowingSquares(int totalTime) {
-    int sw = GetSystemMetrics(SM_CXSCREEN);
-    int sh = GetSystemMetrics(SM_CYSCREEN);
     auto startTime = GetTickCount64();
     srand(time(0));
     while (true) {
         auto hdc = GetDC(nullptr);
-        int x = rand() % sw;
-        int y = rand() % sh;
+        int x = rand() % screenWidth;
+        int y = rand() % screenHeight;
         int size = 100;
 
         for (int i = 0; i < 10; ++i) {
@@ -298,19 +304,17 @@ void GrowingSquares(int totalTime) {
         if (elapsedTime >= totalTime) {
             break;
         }
-        Sleep(1000);
+        Sleep(500);
     }
 }
 
 void InvertSquares(int totalTime) {
-    int sw = GetSystemMetrics(SM_CXSCREEN);
-    int sh = GetSystemMetrics(SM_CYSCREEN);
     auto startTime = GetTickCount64();
     srand(time(0));
     while (true) {
         auto hdc = GetDC(nullptr);
-        int x = rand() % sw;
-        int y = rand() % sh;
+        int x = rand() % screenWidth;
+        int y = rand() % screenHeight;
 
         BitBlt(hdc, x, y, 500, 500, hdc, x + rand() % 21 - 10, y + rand() % 21 - 10, (int)(SRCINVERT | NOTSRCCOPY));
         ReleaseDC(nullptr, hdc);
@@ -325,14 +329,12 @@ void InvertSquares(int totalTime) {
 }
 
 void InvertSpam(int totalTime) {
-    int sw = GetSystemMetrics(SM_CXSCREEN);
-    int sh = GetSystemMetrics(SM_CYSCREEN);
     auto startTime = GetTickCount64();
     srand(time(0));
     while (true) {
         auto hdc = GetDC(nullptr);
 
-        BitBlt(hdc, 0, 0, sw, sh, hdc, 0, 0, (int)(SRCINVERT | NOTSRCCOPY));
+        BitBlt(hdc, 0, 0, screenWidth, screenHeight, hdc, 0, 0, (int)(SRCINVERT | NOTSRCCOPY));
         ReleaseDC(nullptr, hdc);
 
         auto currentTime = GetTickCount64();
@@ -346,8 +348,6 @@ void InvertSpam(int totalTime) {
 
 void RunawayScreen(double speed, int totalTime) {
     auto startTime = GetTickCount64();
-    int w = GetSystemMetrics(SM_CXSCREEN);
-    int h = GetSystemMetrics(SM_CYSCREEN);
     
     while (true) {
         auto currentTime = GetTickCount64();
@@ -358,18 +358,18 @@ void RunawayScreen(double speed, int totalTime) {
 
         HDC hdc = GetDC(0);
         HDC hdcMem = CreateCompatibleDC(hdc);
-        HBITMAP hbm = CreateCompatibleBitmap(hdc, w, h);
+        HBITMAP hbm = CreateCompatibleBitmap(hdc, screenWidth, screenHeight);
         SelectObject(hdcMem, hbm);
 
-        BitBlt(hdcMem, 0, 0, w, h, hdc, 0, 0, SRCCOPY);
-        BitBlt(hdc, 0, 0, w, h, NULL, 0, 0, BLACKNESS);
+        BitBlt(hdcMem, 0, 0, screenWidth, screenHeight, hdc, 0, 0, SRCCOPY);
+        BitBlt(hdc, 0, 0, screenWidth, screenHeight, NULL, 0, 0, BLACKNESS);
 
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                BitBlt(hdc, 
-                    (i * w) + speed,
-                    (j * h) + speed,
-                    w, h,
+                BitBlt(hdc,
+                    (i * screenWidth) + speed,
+                    (j * screenHeight) + speed,
+                    screenWidth, screenHeight,
                     hdcMem,
                     0, 0,
                     SRCCOPY);
@@ -385,30 +385,29 @@ void RunawayScreen(double speed, int totalTime) {
 }
 
 DWORD WINAPI RainbowShader(LPVOID lpParam) {
-    int w = GetSystemMetrics(0), h = GetSystemMetrics(1);
-
-    _RGBQUAD* data = new _RGBQUAD[w * h + w]; // init rgb array
+    _RGBQUAD* data = new _RGBQUAD[screenWidth * screenHeight + screenWidth]; // init rgb array
 
     for (int j = 0;; j++, j %= 3) {
 
         HDC desk = GetDC(NULL);
         HDC hdcdc = CreateCompatibleDC(desk);
-        HBITMAP hbm = CreateBitmap(w, h, 1, 32, data); 
+        HBITMAP hbm = CreateBitmap(screenWidth, screenHeight, 1, 32, data);
         SelectObject(hdcdc, hbm);
-        BitBlt(hdcdc, 0, 0, w, h, desk, 0, 0, SRCCOPY);
+        BitBlt(hdcdc, 0, 0, screenWidth, screenHeight, desk, 0, 0, SRCCOPY);
 
-        GetBitmapBits(hbm, w * h * 4, data);
+        GetBitmapBits(hbm, screenWidth * screenHeight * 4, data);
 
         int cc = 1;
-        for (int i = 0; i < w * h; i++) {
-            int x = i + w;
-            int y = i + h;
+        for (int i = 0; i < screenWidth * screenHeight; i++) {
+            // Do some math
+            int x = i + screenWidth;
+            int y = i + screenHeight;
             int total = (x / y) | 50000;
             data[i].rgb -= total;
             cc += 5;
         }
-        SetBitmapBits(hbm, w * h * 4, data);
-        BitBlt(desk, 0, 0, w, h, hdcdc, 0, 0, SRCCOPY);
+        SetBitmapBits(hbm, screenWidth * screenHeight * 4, data);
+        BitBlt(desk, 0, 0, screenWidth, screenHeight, hdcdc, 0, 0, SRCCOPY);
         DeleteObject(hbm);
         DeleteObject(hdcdc);
         DeleteObject(desk);
@@ -418,34 +417,58 @@ DWORD WINAPI RainbowShader(LPVOID lpParam) {
 }
 
 DWORD WINAPI FractalShader(LPVOID lpParam) {
-    int w = GetSystemMetrics(0), h = GetSystemMetrics(1);
-
-    _RGBQUAD* data = new _RGBQUAD[w * h + w];
+    _RGBQUAD* data = new _RGBQUAD[screenWidth * screenHeight + screenWidth];
 
     for (int j = 0;; j++, j %= 3) {
 
         HDC desk = GetDC(NULL);
         HDC hdcdc = CreateCompatibleDC(desk);
-        HBITMAP hbm = CreateBitmap(w, h, 1, 32, data);
+        HBITMAP hbm = CreateBitmap(screenWidth, screenHeight, 1, 32, data);
         SelectObject(hdcdc, hbm);
-        BitBlt(hdcdc, 0, 0, w, h, desk, 0, 0, SRCCOPY);
+        BitBlt(hdcdc, 0, 0, screenWidth, screenHeight, desk, 0, 0, SRCCOPY);
 
-        GetBitmapBits(hbm, w * h * 4, data);
+        GetBitmapBits(hbm, screenWidth * screenHeight * 4, data);
 
         int cc = 1000;
-        for (int i = 0; i < w * h; i++) {
+        for (int i = 0; i < screenWidth * screenHeight; i++) {
 
-            int total = ((i*2) & (i / h)) | cc;
+            int total = ((i*2) & (i / screenHeight)) | cc;
             data[i].rgb -= total;
             cc = cc % 200;
         }
-        SetBitmapBits(hbm, w * h * 4, data);
-        BitBlt(desk, 0, 0, w, h, hdcdc, 0, 0, SRCCOPY);
+        SetBitmapBits(hbm, screenWidth * screenHeight * 4, data);
+        BitBlt(desk, 0, 0, screenWidth, screenHeight, hdcdc, 0, 0, SRCCOPY);
         DeleteObject(hbm);
         DeleteObject(hdcdc);
         DeleteObject(desk);
     }
     return 0;
+}
+
+DWORD WINAPI SquareFractalShader(LPVOID lpParam) {
+    COLOR* data = (COLOR*)VirtualAlloc(0, (screenWidth * screenHeight + screenWidth) * sizeof(COLOR), MEM_COMMIT, PAGE_READWRITE);
+    HDC hdc = GetDC(0);
+    HDC mdc = CreateCompatibleDC(hdc);
+    HBITMAP bmp = CreateBitmap(screenWidth, screenHeight, 1, 32, data);
+    SelectObject(mdc, bmp);
+
+    while (true) {
+        BitBlt(mdc, 0, 0, screenWidth, screenHeight, hdc, 0, 0, SRCCOPY);
+        GetBitmapBits(bmp, screenWidth * screenHeight * sizeof(COLOR), data);
+
+        for (int x2 = 0; x2 < screenWidth; x2++) {
+            for (int y2 = 0; y2 < screenHeight; y2++) {
+                int wave = ((x2 * y2) | (x2 * y2)) % 512;
+
+                data[y2 * screenWidth + x2].rgb += wave;
+            }
+        }
+
+        SetBitmapBits(bmp, screenWidth * screenHeight * sizeof(COLOR), data);
+        BitBlt(hdc, 0, 0, screenWidth, screenHeight, mdc, 0, 0, SRCCOPY);
+
+        Sleep(10);
+    }
 }
 
 int main()
@@ -457,6 +480,9 @@ int main()
     int timeInBetween = 1 * 1000;
 #if CLEAR_SCRN
     SendMessage(FindWindow("Shell_TrayWnd", NULL), WM_COMMAND, 419, 0); // Win + D
+    // Incase a smaller ratio app was open
+    screenWidth = GetSystemMetrics(SM_CXSCREEN);
+    screenHeight = GetSystemMetrics(SM_CYSCREEN);
 #endif
 
 #if KILL_WALLS

@@ -89,6 +89,10 @@ namespace GDI_GUI
                 {
                     payloadBuilder.AddThreadedEffect("thrd_rainbow", "RainbowShader");
                 }
+                else if (payloadName == "SquareFractalShader")
+                {
+                    payloadBuilder.AddThreadedEffect("thrd_sqrare", "SquareFractalShader");
+                }
                 else payloadBuilder.AddEffect(payloadName);
             }
 
@@ -299,6 +303,12 @@ namespace GDI_GUI
         {
             if (chk_shake.Checked) lst_timesheet.Items.Add("ScreenShake");
             else lst_timesheet.Items.Remove("ScreenShake");
+        }
+
+        private void chk_squarefractal_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chk_squarefractal.Checked) lst_timesheet.Items.Add("SquareFractalShader");
+            else lst_timesheet.Items.Remove("SquareFractalShader");
         }
 
         #endregion
